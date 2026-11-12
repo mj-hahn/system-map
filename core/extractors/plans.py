@@ -125,6 +125,14 @@ def derive_status(claims: list[dict]) -> str:
     return "planned" if missing >= PLANNED_FROM else "partial"
 
 
+def plan_id(path: str) -> str:
+    """A plan's id is its path below its plans folder, so same-named plans stay apart."""
+    for directory in PLAN_DIRS:
+        if path.startswith(directory):
+            return "plan:" + path[len(directory):].removesuffix(".md")
+    return "plan:" + path.rsplit("/", 1)[-1].removesuffix(".md")
+
+
 def extract(source) -> list[dict]:
     index = Index(source)
     paths = plan_files(source)
@@ -134,10 +142,9 @@ def extract(source) -> list[dict]:
         text = contents.get(path, "")
         claims = claims_of(text, path, index)
         declared = declared_status(text)
-        slug = path.rsplit("/", 1)[-1].removesuffix(".md")
         plans.append(
             {
-                "id": f"plan:{slug}",
+                "id": plan_id(path),
                 "kind": "plan",
                 "layer": "facts",
                 "name": title_of(text, path),
