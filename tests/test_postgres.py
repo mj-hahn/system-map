@@ -21,6 +21,35 @@ class Case(unittest.TestCase):
         return replay(TreeSource(repo))
 
 
+class MigrationOrder(unittest.TestCase):
+    def replay_named(self, migrations: dict[str, str]):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = Path(tmp.name)
+        for name, sql in migrations.items():
+            write_migration(repo, name, sql)
+        return replay(TreeSource(repo))
+
+    def test_plain_numbered_migrations_sort_numerically(self):
+        schema = self.replay_named(
+            {
+                "1_init.sql": "CREATE TABLE users (id int);",
+                "2_add_legacy.sql": "ALTER TABLE users ADD COLUMN legacy text;",
+                "10_drop_legacy.sql": "ALTER TABLE users DROP COLUMN legacy;",
+            }
+        )
+        self.assertEqual(list(schema.tables["public.users"].columns), ["id"])
+
+    def test_timestamped_migrations_keep_chronological_order(self):
+        schema = self.replay_named(
+            {
+                "20260102000000_drop_legacy.sql": "ALTER TABLE users DROP COLUMN legacy;",
+                "20260101000000_init.sql": "CREATE TABLE users (id int, legacy text);",
+            }
+        )
+        self.assertEqual(list(schema.tables["public.users"].columns), ["id"])
+
+
 class Splitting(unittest.TestCase):
     def test_masking_keeps_every_offset_and_line(self):
         sql = "select 1; -- x\n$$ a\nb $$;\nselect 'a;b';"
