@@ -179,7 +179,14 @@ def package_dependencies(source) -> dict[str, set[str]]:
         data = json.loads(source.read_many(["package.json"])["package.json"])
     except (KeyError, ValueError):
         return {"runtime": set(), "dev": set()}
-    return {"runtime": set(data.get("dependencies") or {}), "dev": set(data.get("devDependencies") or {})}
+    if not isinstance(data, dict):
+        return {"runtime": set(), "dev": set()}
+    runtime = data.get("dependencies")
+    dev = data.get("devDependencies")
+    return {
+        "runtime": set(runtime) if isinstance(runtime, dict) else set(),
+        "dev": set(dev) if isinstance(dev, dict) else set(),
+    }
 
 
 def open_source(repo_root: Path, ref: str | None = None) -> GitSource | TreeSource:
