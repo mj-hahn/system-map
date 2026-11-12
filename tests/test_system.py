@@ -130,6 +130,16 @@ class Plans(Fixture):
     def test_filter_by_status(self):
         self.assertEqual([p["id"] for p in store.plan_items(self.target, "built")], ["plan:billing"])
 
+    def test_same_name_plans_in_different_folders_stay_apart(self):
+        write(self.repo, "docs/specs/auth/design.md", PLANNED_SPEC)
+        write(self.repo, "docs/specs/billing/design.md", PLANNED_SPEC)
+        commit_all(self.repo)
+        store.build(self.repo, self.data)
+        joined = store.load_system(store.repo_dir(self.repo, self.data))
+        ids = {n["id"] for n in joined["nodes"] if n["kind"] == "plan"}
+        self.assertIn("plan:auth/design", ids)
+        self.assertIn("plan:billing/design", ids)
+
     def test_overview_names_what_is_not_built(self):
         text = (store.current(self.target) / "overview.md").read_text()
         self.assertIn("Not fully built: plan:mail (planned)", text)
