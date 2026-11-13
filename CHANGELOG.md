@@ -7,6 +7,10 @@ commit that set the version in `app.json`. The format follows
 
 ## [Unreleased]
 
+### Added
+- `CONTRIBUTING.md`: claim an issue, and wait to be assigned, before opening a pull request for it.
+  It also covers tests, checks and disclosing AI tools. The README and the developer guide link to it.
+
 ### Changed
 - The developer guide (code layout, checks, running the page without Kiro Crew, and proving each
   reader against the real tool) moved from the README to `docs/development.md`. The README keeps a
