@@ -16,6 +16,10 @@ commit that set the version in `app.json`. The format follows
   reader against the real tool) moved from the README to `docs/development.md`. The README keeps a
   short pointer and the two check commands.
 
+### Fixed
+- Migrations replay in number order, so `2_add_legacy.sql` runs before `10_drop_legacy.sql`:
+  plain-numbered migration folders no longer keep a column that a later migration drops.
+
 ## [0.12.2] - 2026-11-09
 
 ### Security

@@ -778,12 +778,26 @@ def inputs(source) -> dict[str, str]:
     return {path: source.blobs[path] for path in _migration_files(source)}
 
 
+#: A leading number, as in `migrations/10_drop.sql` or `migrations/2_add.sql`.
+NUMBER_PREFIX = re.compile(r"(\d+)")
+
+
+def migration_sort_key(path: str) -> tuple:
+    """Order migrations by number, not as text: `2_` runs before `10_`.
+
+    Timestamped names (Supabase, dbmate) sort the same either way; plain
+    numbers are where text order would drop a column too early.
+    """
+    parts = NUMBER_PREFIX.split(path.rsplit("/", 1)[-1])
+    return tuple(int(part) if part.isdigit() else part.lower() for part in parts)
+
+
 def _migration_files(source) -> list[str]:
     for directory in MIGRATION_DIRS:
         files = source.list_files(directory, (".sql",))
         direct = [f for f in files if "/" not in f[len(directory) :]]
         if direct:
-            return direct
+            return sorted(direct, key=migration_sort_key)
     return []
 
 

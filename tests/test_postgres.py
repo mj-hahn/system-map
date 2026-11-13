@@ -237,3 +237,24 @@ class Accounting(Case):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Ordering(unittest.TestCase):
+    def test_plain_numbered_migrations_run_in_number_order(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = Path(tmp.name)
+        write_migration(repo, "1_init.sql", "CREATE TABLE users (id int);")
+        write_migration(repo, "2_add_legacy.sql", "ALTER TABLE users ADD COLUMN legacy text;")
+        write_migration(repo, "10_drop_legacy.sql", "ALTER TABLE users DROP COLUMN legacy;")
+        schema = replay(TreeSource(repo))
+        self.assertNotIn("legacy", schema.tables["public.users"].columns)
+
+    def test_timestamped_names_keep_their_order(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = Path(tmp.name)
+        write_migration(repo, "20260101000000_a.sql", "CREATE TABLE users (id int, legacy text);")
+        write_migration(repo, "20260101000001_b.sql", "ALTER TABLE users DROP COLUMN legacy;")
+        schema = replay(TreeSource(repo))
+        self.assertNotIn("legacy", schema.tables["public.users"].columns)
