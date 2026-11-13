@@ -235,5 +235,38 @@ class Accounting(Case):
         self.assertEqual(schema.unknown["policy outside the model"], 1)
 
 
+
+
+class MigrationOrder(Case):
+    def test_plain_numbers_sort_numerically(self):
+        """10_ runs after 2_, so a column dropped in 10 is gone."""
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = Path(tmp.name)
+        write_migration(repo, "1_init.sql", "CREATE TABLE users (id int);")
+        write_migration(repo, "2_add_legacy.sql", "ALTER TABLE users ADD COLUMN legacy text;")
+        write_migration(repo, "10_drop_legacy.sql", "ALTER TABLE users DROP COLUMN legacy;")
+        schema = replay(TreeSource(repo))
+        table = schema.tables["public.users"]
+        self.assertNotIn("legacy", table.columns)
+
+    def test_timestamped_names_still_sort_correctly(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = Path(tmp.name)
+        write_migration(repo, "20240101120000_init.sql", "CREATE TABLE a (id int);")
+        write_migration(repo, "20240102120000_add.sql", "ALTER TABLE a ADD COLUMN x int;")
+        schema = replay(TreeSource(repo))
+        self.assertIn("x", schema.tables["public.a"].columns)
+
+    def test_mixed_styles(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = Path(tmp.name)
+        write_migration(repo, "001_init.sql", "CREATE TABLE t (id int);")
+        write_migration(repo, "2_add.sql", "ALTER TABLE t ADD COLUMN y int;")
+        schema = replay(TreeSource(repo))
+        self.assertIn("y", schema.tables["public.t"].columns)
+
 if __name__ == "__main__":
     unittest.main()

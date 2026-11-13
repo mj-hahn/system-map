@@ -12,6 +12,18 @@ from dataclasses import dataclass, field
 
 ENGINE = "postgres"
 MIGRATION_DIRS = ("supabase/migrations/", "db/migrations/", "migrations/")
+
+def _natural_key(path: str) -> tuple:
+    """Sort key that treats a leading number as an integer, then the rest of the name.
+
+    So 10_drop.sql sorts after 2_add.sql, while timestamped names still sort correctly.
+    """
+    name = path.rsplit("/", 1)[-1]
+    match = re.match(r"(\d+)", name)
+    if match:
+        return (int(match.group(1)), name)
+    return (float("inf"), name)
+
 IDENT = r'(?:"[^"]+"|[A-Za-z_][\w$]*)'
 QUALIFIED = rf"(?:{IDENT}\s*\.\s*)?{IDENT}"
 #: Statements that shape data or privileges, not structure.
@@ -783,7 +795,7 @@ def _migration_files(source) -> list[str]:
         files = source.list_files(directory, (".sql",))
         direct = [f for f in files if "/" not in f[len(directory) :]]
         if direct:
-            return direct
+            return sorted(direct, key=_natural_key)
     return []
 
 
