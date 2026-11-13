@@ -778,12 +778,20 @@ def inputs(source) -> dict[str, str]:
     return {path: source.blobs[path] for path in _migration_files(source)}
 
 
+def _natural_sort_key(path: str) -> tuple[tuple[int, int | str], ...]:
+    """Sort digit runs numerically while keeping the surrounding filename text ordered."""
+    return tuple(
+        (1, int(part)) if part.isdigit() else (0, part.casefold())
+        for part in re.split(r"(\d+)", path)
+    )
+
+
 def _migration_files(source) -> list[str]:
     for directory in MIGRATION_DIRS:
         files = source.list_files(directory, (".sql",))
         direct = [f for f in files if "/" not in f[len(directory) :]]
         if direct:
-            return direct
+            return sorted(direct, key=_natural_sort_key)
     return []
 
 
