@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT))
 
 from core import explore, findings, store  # noqa: E402
 from core.extractors import extractor_for, postgres, sqlite  # noqa: E402
-from core.sources import open_source  # noqa: E402
+from core.sources import open_source, package_dependencies  # noqa: E402
 from tests.helpers import commit_all, git  # noqa: E402
 
 DRIVER = '{"dependencies": {"next": "16.0.0", "better-sqlite3": "13.0.0"}}'
@@ -70,6 +70,32 @@ class Repo(unittest.TestCase):
 
     def constraint(self, table: str, kind: str) -> list[dict]:
         return [row for row in self.table(table)["constraints"] if row["kind"] == kind]
+
+
+class PackageManifest(Repo):
+    def test_non_object_manifest_has_no_dependencies(self):
+        for value in ([], "not an object", 42, None):
+            with self.subTest(value=value):
+                self.write("package.json", json.dumps(value))
+                self.assertEqual(package_dependencies(open_source(self.root)), {"runtime": set(), "dev": set()})
+
+    def test_malformed_dependency_groups_are_ignored_independently(self):
+        self.write("package.json", json.dumps({
+            "dependencies": ["better-sqlite3"],
+            "devDependencies": {"sqlite3": "5.1.7"},
+        }))
+        self.assertEqual(package_dependencies(open_source(self.root)), {"runtime": set(), "dev": {"sqlite3"}})
+
+        self.write("package.json", json.dumps({
+            "dependencies": {"better-sqlite3": "13.0.0"},
+            "devDependencies": 42,
+        }))
+        self.assertEqual(package_dependencies(open_source(self.root)), {"runtime": {"better-sqlite3"}, "dev": set()})
+
+    def test_build_can_still_detect_a_sqlite_file(self):
+        self.write("package.json", "[]")
+        self.write("prisma/schema.prisma", 'datasource db {\n  provider = "sqlite"\n}\n')
+        self.assertIs(extractor_for(open_source(self.root)), sqlite)
 
 
 class ReadingASchema(Repo):
