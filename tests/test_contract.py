@@ -185,7 +185,7 @@ class StoreListing(unittest.TestCase):
                 self.assertIn(anchor, heading_anchors(text))
 
     def test_links_between_the_docs_land_on_a_file_and_a_heading(self):
-        for doc in ("README.md", "docs/development.md", "docs/backlog.md"):
+        for doc in ("README.md", "docs/development.md", "docs/backlog.md", "CONTRIBUTING.md", "CLAUDE.md"):
             text = (ROOT / doc).read_text()
             for target, anchor in re.findall(r"\]\(([^)#\s:]*)(?:#([^)\s]+))?\)", text):
                 path = (ROOT / doc).parent / target if target else ROOT / doc

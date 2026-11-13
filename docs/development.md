@@ -16,7 +16,8 @@ facts. Run every command from the repo root. For what the app does and how to in
 | `docs/` | Context rules, platform notes and the backlog. |
 
 Host rules learned while building it are in [platform-notes.md](platform-notes.md), and what's left
-is in [backlog.md](backlog.md). Releases are in [CHANGELOG.md](../CHANGELOG.md).
+is in [backlog.md](backlog.md). Releases are in [CHANGELOG.md](../CHANGELOG.md). How to claim an
+issue and open a pull request is in [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Checks
 

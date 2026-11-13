@@ -247,6 +247,8 @@ python3 tests/strict.py
 (cd ui && npm test && npm run typecheck && npm run build)
 ```
 
+To fix an issue, read [CONTRIBUTING.md](CONTRIBUTING.md) first: claim the issue before you start.
+
 ## License
 
 Apache-2.0
