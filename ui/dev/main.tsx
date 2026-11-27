@@ -4,6 +4,9 @@ import Panel from '../src/Panel'
 
 const query = new URLSearchParams(location.search)
 if (query.get('theme') === 'dark') document.documentElement.classList.add('dark')
+// Starts in a System Map theme, as if the person had picked it.
+const look = query.get('look')
+if (look) localStorage.setItem('system-map.theme', look)
 
 createRoot(document.getElementById('root')!).render(
   query.get('view') === 'panel' ? (

@@ -36,6 +36,7 @@ import { RiskView } from './Risk'
 import { StatusChip } from './StatusChip'
 import { SystemMap } from './SystemMap'
 import { TAB_PANEL_ID, Tabs } from './Tabs'
+import { ThemePicker, ThemeScope } from './Theme'
 import type { TabItem } from './Tabs'
 import { WorktreesView } from './Worktrees'
 import { BASE, useActiveRepo, useLive, useNode, useOverview, useProposal, useVersioned } from './model'
@@ -247,6 +248,14 @@ function FirstRun({ onBuilt }: { onBuilt: (key: string) => void }) {
 }
 
 export default function SystemMapApp() {
+  return (
+    <ThemeScope style={{ minHeight: '100%' }}>
+      <SystemMapPage />
+    </ThemeScope>
+  )
+}
+
+function SystemMapPage() {
   const { repos, active, loaded, choose, reload } = useActiveRepo()
 
   if (!loaded) {
@@ -677,19 +686,22 @@ function ProjectPage({
       <PageHeader
         title={title}
         actions={
-          overview && status ? (
-            <StatusChip
-              status={status}
-              detail={fresh?.stale ? `${changed} schema ${changed === 1 ? 'file' : 'files'} changed on ${fresh.ref}` : undefined}
-              commit={overview.manifest.commit}
-              builtAt={overview.manifest.built_at}
-              read={overview.manifest.read}
-              setAside={overview.set_aside}
-              busy={rebuilding}
-              result={rebuilt}
-              onRebuild={() => void rebuild()}
-            />
-          ) : undefined
+          <>
+            <ThemePicker />
+            {overview && status && (
+              <StatusChip
+                status={status}
+                detail={fresh?.stale ? `${changed} schema ${changed === 1 ? 'file' : 'files'} changed on ${fresh.ref}` : undefined}
+                commit={overview.manifest.commit}
+                builtAt={overview.manifest.built_at}
+                read={overview.manifest.read}
+                setAside={overview.set_aside}
+                busy={rebuilding}
+                result={rebuilt}
+                onRebuild={() => void rebuild()}
+              />
+            )}
+          </>
         }
       />
       <div ref={ref} className="sm-page" style={{ height, display: 'flex', flexDirection: 'column', gap: GAP, minHeight: 0 }}>

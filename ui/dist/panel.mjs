@@ -1,53 +1,56 @@
-import { jsx as t, jsxs as i, Fragment as v } from "react/jsx-runtime";
-import { ContentSkeleton as y, Btn as x } from "@kirocrew/app-sdk/ui";
-import { useState as S } from "react";
-import { u as b, n as M, B as j, q as k, I as B, J as E, K as z, M as N, Z as O, S as C, N as P, T, E as w } from "./chunks/ProjectMenu-Cjgtt7C7.mjs";
+import { jsx as e, jsxs as i, Fragment as v } from "react/jsx-runtime";
+import { ContentSkeleton as y, Btn as S } from "@kirocrew/app-sdk/ui";
+import { useState as x } from "react";
+import { T as b, u as M, n as j, B as k, q as B, I as E, J as P, K as z, M as C, $ as N, S as O, N as T, P as $, E as w } from "./chunks/Theme-BaqiHKaA.mjs";
 const A = 3e4, D = { padding: 12, fontSize: 13 };
 function H({
-  repo: s,
+  repo: n,
   projects: l,
   choose: r,
   reload: c
 }) {
-  const { overview: e, error: d } = M(s), [f, u] = S(null), m = j(f, s), a = k("/worktrees", s, A).value, g = ((a == null ? void 0 : a.overlaps) ?? []).filter((n) => n.severity === "high" || n.severity === "medium"), o = e == null ? void 0 : e.freshness, p = o ? B(E(o), o.commits_behind, o.ref) : null, h = z({ projects: l, activeKey: s, compact: !0, onPick: r, onReload: () => void c() });
+  const { overview: t, error: d } = j(n), [f, u] = x(null), m = k(f, n), o = B("/worktrees", n, A).value, g = ((o == null ? void 0 : o.overlaps) ?? []).filter((s) => s.severity === "high" || s.severity === "medium"), a = t == null ? void 0 : t.freshness, p = a ? E(P(a), a.commits_behind, a.ref) : null, h = z({ projects: l, activeKey: n, compact: !0, onPick: r, onReload: () => void c() });
   return /* @__PURE__ */ i("div", { style: { padding: 12, height: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column", minHeight: 0 }, children: [
     h.menu,
     h.dialogs,
-    d && !e && /* @__PURE__ */ t("p", { style: { fontSize: 13 }, children: d }),
-    !e && !d && /* @__PURE__ */ t(y, { rows: 6 }),
-    e && /* @__PURE__ */ i(v, { children: [
-      /* @__PURE__ */ i("p", { style: { ...N, fontSize: 13, margin: "4px 0 8px" }, "data-testid": "panel-summary", children: [
-        O(e.tables.length, "table"),
-        e.manifest.commit ? ` at ${e.manifest.commit.slice(0, 7)}` : "",
+    d && !t && /* @__PURE__ */ e("p", { style: { fontSize: 13 }, children: d }),
+    !t && !d && /* @__PURE__ */ e(y, { rows: 6 }),
+    t && /* @__PURE__ */ i(v, { children: [
+      /* @__PURE__ */ i("p", { style: { ...C, fontSize: 13, margin: "4px 0 8px" }, "data-testid": "panel-summary", children: [
+        N(t.tables.length, "table"),
+        t.manifest.commit ? ` at ${t.manifest.commit.slice(0, 7)}` : "",
         ". ",
         p == null ? void 0 : p.label
       ] }),
-      g.map((n) => /* @__PURE__ */ i(
+      g.map((s) => /* @__PURE__ */ i(
         "p",
         {
           "data-testid": "panel-collision",
           style: { display: "flex", gap: 6, alignItems: "flex-start", fontSize: 13, margin: "0 0 8px", overflowWrap: "anywhere" },
           children: [
-            /* @__PURE__ */ t(C, { severity: n.severity }),
-            /* @__PURE__ */ t("span", { children: n.summary })
+            /* @__PURE__ */ e(O, { severity: s.severity }),
+            /* @__PURE__ */ e("span", { children: s.summary })
           ]
         },
-        `${n.a}|${n.b}`
+        `${s.a}|${s.b}`
       )),
       m ? /* @__PURE__ */ i("div", { style: { overflowY: "auto", minHeight: 0, flex: 1 }, children: [
         /* @__PURE__ */ i("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }, children: [
-          /* @__PURE__ */ t(x, { onClick: () => u(null), children: "Back" }),
-          /* @__PURE__ */ t("span", { style: { fontWeight: 600 }, children: m.name })
+          /* @__PURE__ */ e(S, { onClick: () => u(null), children: "Back" }),
+          /* @__PURE__ */ e("span", { style: { fontWeight: 600 }, children: m.name })
         ] }),
-        /* @__PURE__ */ t(P, { node: m })
-      ] }) : /* @__PURE__ */ t(T, { tables: e.tables, selected: f, working: w(a), onSelect: u })
+        /* @__PURE__ */ e(T, { node: m })
+      ] }) : /* @__PURE__ */ e($, { tables: t.tables, selected: f, working: w(o), onSelect: u })
     ] })
   ] });
 }
-function _() {
-  const { active: s, loaded: l, repos: r, choose: c, reload: e } = b();
-  return l ? s ? /* @__PURE__ */ t(H, { repo: s, projects: r, choose: c, reload: e }, s) : /* @__PURE__ */ t("p", { style: D, children: "No projects yet. Open System Map from Apps to add one." }) : /* @__PURE__ */ t(y, { rows: 6 });
+function L() {
+  return /* @__PURE__ */ e(b, { style: { height: "100%" }, children: /* @__PURE__ */ e(I, {}) });
+}
+function I() {
+  const { active: n, loaded: l, repos: r, choose: c, reload: t } = M();
+  return l ? n ? /* @__PURE__ */ e(H, { repo: n, projects: r, choose: c, reload: t }, n) : /* @__PURE__ */ e("p", { style: D, children: "No projects yet. Open System Map from Apps to add one." }) : /* @__PURE__ */ e(y, { rows: 6 });
 }
 export {
-  _ as default
+  L as default
 };
