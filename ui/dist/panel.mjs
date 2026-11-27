@@ -1,15 +1,15 @@
 import { jsx as e, jsxs as i, Fragment as v } from "react/jsx-runtime";
 import { ContentSkeleton as y, Btn as S } from "@kirocrew/app-sdk/ui";
 import { useState as x } from "react";
-import { T as b, u as M, n as j, B as k, q as B, I as E, J as P, K as z, M as C, $ as N, S as O, N as T, P as $, E as w } from "./chunks/Theme-BaqiHKaA.mjs";
+import { T as b, u as M, o as j, E as k, v as E, J as P, K as z, L as B, M as C, $ as N, S as O, N as T, P as $, F as w } from "./chunks/Theme-Bow5woSM.mjs";
 const A = 3e4, D = { padding: 12, fontSize: 13 };
 function H({
-  repo: n,
+  repo: s,
   projects: l,
   choose: r,
   reload: c
 }) {
-  const { overview: t, error: d } = j(n), [f, u] = x(null), m = k(f, n), o = B("/worktrees", n, A).value, g = ((o == null ? void 0 : o.overlaps) ?? []).filter((s) => s.severity === "high" || s.severity === "medium"), a = t == null ? void 0 : t.freshness, p = a ? E(P(a), a.commits_behind, a.ref) : null, h = z({ projects: l, activeKey: n, compact: !0, onPick: r, onReload: () => void c() });
+  const { overview: t, error: d } = j(s), [f, u] = x(null), m = k(f, s), o = E("/worktrees", s, A).value, g = ((o == null ? void 0 : o.overlaps) ?? []).filter((n) => n.severity === "high" || n.severity === "medium"), a = t == null ? void 0 : t.freshness, p = a ? P(z(a), a.commits_behind, a.ref) : null, h = B({ projects: l, activeKey: s, compact: !0, onPick: r, onReload: () => void c() });
   return /* @__PURE__ */ i("div", { style: { padding: 12, height: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column", minHeight: 0 }, children: [
     h.menu,
     h.dialogs,
@@ -22,17 +22,17 @@ function H({
         ". ",
         p == null ? void 0 : p.label
       ] }),
-      g.map((s) => /* @__PURE__ */ i(
+      g.map((n) => /* @__PURE__ */ i(
         "p",
         {
           "data-testid": "panel-collision",
           style: { display: "flex", gap: 6, alignItems: "flex-start", fontSize: 13, margin: "0 0 8px", overflowWrap: "anywhere" },
           children: [
-            /* @__PURE__ */ e(O, { severity: s.severity }),
-            /* @__PURE__ */ e("span", { children: s.summary })
+            /* @__PURE__ */ e(O, { severity: n.severity }),
+            /* @__PURE__ */ e("span", { children: n.summary })
           ]
         },
-        `${s.a}|${s.b}`
+        `${n.a}|${n.b}`
       )),
       m ? /* @__PURE__ */ i("div", { style: { overflowY: "auto", minHeight: 0, flex: 1 }, children: [
         /* @__PURE__ */ i("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }, children: [
@@ -44,13 +44,13 @@ function H({
     ] })
   ] });
 }
-function L() {
-  return /* @__PURE__ */ e(b, { style: { height: "100%" }, children: /* @__PURE__ */ e(I, {}) });
+function F() {
+  return /* @__PURE__ */ e(b, { style: { height: "100%" }, children: /* @__PURE__ */ e(K, {}) });
 }
-function I() {
-  const { active: n, loaded: l, repos: r, choose: c, reload: t } = M();
-  return l ? n ? /* @__PURE__ */ e(H, { repo: n, projects: r, choose: c, reload: t }, n) : /* @__PURE__ */ e("p", { style: D, children: "No projects yet. Open System Map from Apps to add one." }) : /* @__PURE__ */ e(y, { rows: 6 });
+function K() {
+  const { active: s, loaded: l, repos: r, choose: c, reload: t } = M();
+  return l ? s ? /* @__PURE__ */ e(H, { repo: s, projects: r, choose: c, reload: t }, s) : /* @__PURE__ */ e("p", { style: D, children: "No projects yet. Open System Map from Apps to add one." }) : /* @__PURE__ */ e(y, { rows: 6 });
 }
 export {
-  L as default
+  F as default
 };

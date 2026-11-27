@@ -1,5 +1,6 @@
 // A stand-in for the host's shared components, close enough to judge layout.
 import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 
 export function Card({ style, ...rest }: HTMLAttributes<HTMLDivElement>) {
   return <div {...rest} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10, padding: 16, ...style }} />
@@ -64,7 +65,8 @@ export function Modal({ open, onClose, title, maxWidth = 640, dismissDisabled, c
   const dismiss = () => {
     if (!dismissDisabled) onClose()
   }
-  return (
+  // The host's Modal portals to the body, outside the app's own root, so this one does too.
+  return createPortal(
     <div
       onKeyDown={(event) => {
         if (event.key === 'Escape') dismiss()
@@ -82,7 +84,8 @@ export function Modal({ open, onClose, title, maxWidth = 640, dismissDisabled, c
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

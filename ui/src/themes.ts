@@ -1,5 +1,6 @@
 // Themes change System Map's colours. Each sets the host's own colour variables, which every view
-// already reads, so nothing else needs to know a theme exists. Light or dark follows the host.
+// and the host's own controls already read, so nothing else needs to know a theme exists. Light
+// or dark follows the host.
 
 export type ThemeId = 'host' | 'blueprint' | 'paper' | 'contrast'
 export type Mode = 'light' | 'dark'
@@ -8,73 +9,118 @@ type Colours = Record<string, string>
 export interface Theme {
   id: ThemeId
   name: string
-  /** Background, accent and text, for the menu. */
-  swatch: [string, string, string]
 }
 
 export const DEFAULT_THEME: ThemeId = 'host'
 
 export const THEMES: Theme[] = [
-  { id: 'host', name: 'Kiro Crew', swatch: ['#fafafa', '#2f7d5c', '#18181b'] },
-  { id: 'blueprint', name: 'Blueprint', swatch: ['#eef3f9', '#1d5fa8', '#0f2742'] },
-  { id: 'paper', name: 'Paper', swatch: ['#f6f1e7', '#9c3d27', '#2b2118'] },
-  { id: 'contrast', name: 'High contrast', swatch: ['#ffffff', '#0040c1', '#000000'] },
+  { id: 'host', name: 'Kiro Crew' },
+  { id: 'blueprint', name: 'Blueprint' },
+  { id: 'paper', name: 'Paper' },
+  { id: 'contrast', name: 'High contrast' },
 ]
 
-const COLOURS: Record<Exclude<ThemeId, 'host'>, Record<Mode, Colours>> = {
+/** What each theme picks. Everything else the host reads is worked out from these. */
+interface Palette {
+  bg: string
+  elevated: string
+  hover: string
+  card: string
+  text: string
+  strong: string
+  muted: string
+  border: string
+  borderStrong: string
+  accent: string
+  accentFg: string
+  danger: string
+  warn: string
+  warnText: string
+  ok: string
+  info: string
+}
+
+const PALETTES: Record<Exclude<ThemeId, 'host'>, Record<Mode, Palette>> = {
   blueprint: {
     light: {
-      '--bg': '#eef3f9', '--bg-elevated': '#ffffff', '--bg-hover': '#e1eaf4', '--card': '#f8fbfe',
-      '--text': '#0f2742', '--text-strong': '#071a30', '--muted': '#4a6380',
-      '--border': '#c9d7e6', '--border-strong': '#8aa3be',
-      '--accent': '#1d5fa8', '--accent-fg': '#ffffff', '--accent-subtle': 'rgba(29, 95, 168, 0.16)',
-      '--danger': '#b42318', '--warn': '#b54708', '--warn-text': '#9a4a06', '--ok': '#157347', '--info': '#1d5fa8',
+      bg: '#eef3f9', elevated: '#ffffff', hover: '#e1eaf4', card: '#f8fbfe',
+      text: '#0f2742', strong: '#071a30', muted: '#455d79', border: '#c9d7e6', borderStrong: '#8aa3be',
+      accent: '#1d5fa8', accentFg: '#ffffff',
+      danger: '#b42318', warn: '#b54708', warnText: '#8f4405', ok: '#10663e', info: '#1d5fa8',
     },
     dark: {
-      '--bg': '#0c1d33', '--bg-elevated': '#13294a', '--bg-hover': '#1a3358', '--card': '#102440',
-      '--text': '#e6eef8', '--text-strong': '#ffffff', '--muted': '#9db3cc',
-      '--border': '#24406a', '--border-strong': '#4d6d96',
-      '--accent': '#6cb4ff', '--accent-fg': '#06182c', '--accent-subtle': 'rgba(108, 180, 255, 0.2)',
-      '--danger': '#ff8a80', '--warn': '#f5b14c', '--warn-text': '#f5b14c', '--ok': '#5fd39a', '--info': '#6cb4ff',
+      bg: '#0c1d33', elevated: '#13294a', hover: '#1a3358', card: '#102440',
+      text: '#e6eef8', strong: '#ffffff', muted: '#a3b8d0', border: '#24406a', borderStrong: '#4d6d96',
+      accent: '#7dbdff', accentFg: '#06182c',
+      danger: '#ff8a80', warn: '#f5b14c', warnText: '#f5b14c', ok: '#5fd39a', info: '#7dbdff',
     },
   },
   paper: {
     light: {
-      '--bg': '#f6f1e7', '--bg-elevated': '#fffdf8', '--bg-hover': '#ede5d6', '--card': '#fffaf0',
-      '--text': '#2b2118', '--text-strong': '#1a120b', '--muted': '#6b5d4d',
-      '--border': '#e0d5c1', '--border-strong': '#a8977d',
-      '--accent': '#9c3d27', '--accent-fg': '#ffffff', '--accent-subtle': 'rgba(156, 61, 39, 0.14)',
-      '--danger': '#a61b1b', '--warn': '#a85d00', '--warn-text': '#8a4b00', '--ok': '#3f6b2a', '--info': '#2f5d7c',
+      bg: '#f6f1e7', elevated: '#fffdf8', hover: '#ede5d6', card: '#fffaf0',
+      text: '#2b2118', strong: '#1a120b', muted: '#64564a', border: '#e0d5c1', borderStrong: '#a8977d',
+      accent: '#9c3d27', accentFg: '#ffffff',
+      danger: '#a61b1b', warn: '#a85d00', warnText: '#8a4b00', ok: '#386024', info: '#2f5d7c',
     },
     dark: {
-      '--bg': '#1f1a15', '--bg-elevated': '#2a231c', '--bg-hover': '#332a21', '--card': '#262019',
-      '--text': '#efe6d8', '--text-strong': '#fffaf0', '--muted': '#b3a48f',
-      '--border': '#3e3428', '--border-strong': '#6e604e',
-      '--accent': '#e0896b', '--accent-fg': '#23120b', '--accent-subtle': 'rgba(224, 137, 107, 0.2)',
-      '--danger': '#f28b82', '--warn': '#e3a857', '--warn-text': '#e3a857', '--ok': '#9cc47e', '--info': '#8fb8d6',
+      bg: '#1f1a15', elevated: '#2a231c', hover: '#332a21', card: '#262019',
+      text: '#efe6d8', strong: '#fffaf0', muted: '#b8a994', border: '#3e3428', borderStrong: '#6e604e',
+      accent: '#eb9a7d', accentFg: '#23120b',
+      danger: '#f28b82', warn: '#e3a857', warnText: '#e3a857', ok: '#9cc47e', info: '#8fb8d6',
     },
   },
   contrast: {
     light: {
-      '--bg': '#ffffff', '--bg-elevated': '#ffffff', '--bg-hover': '#ececec', '--card': '#ffffff',
-      '--text': '#000000', '--text-strong': '#000000', '--muted': '#333333',
-      '--border': '#595959', '--border-strong': '#000000',
-      '--accent': '#0040c1', '--accent-fg': '#ffffff', '--accent-subtle': 'rgba(0, 64, 193, 0.16)',
-      '--danger': '#b00000', '--warn': '#8a4500', '--warn-text': '#7a3d00', '--ok': '#005a1f', '--info': '#0040c1',
+      bg: '#ffffff', elevated: '#ffffff', hover: '#ececec', card: '#ffffff',
+      text: '#000000', strong: '#000000', muted: '#333333', border: '#595959', borderStrong: '#000000',
+      accent: '#0040c1', accentFg: '#ffffff',
+      danger: '#b00000', warn: '#8a4500', warnText: '#7a3d00', ok: '#005a1f', info: '#0040c1',
     },
     dark: {
-      '--bg': '#000000', '--bg-elevated': '#0d0d0d', '--bg-hover': '#1f1f1f', '--card': '#000000',
-      '--text': '#ffffff', '--text-strong': '#ffffff', '--muted': '#d0d0d0',
-      '--border': '#a6a6a6', '--border-strong': '#ffffff',
-      '--accent': '#ffd60a', '--accent-fg': '#000000', '--accent-subtle': 'rgba(255, 214, 10, 0.22)',
-      '--danger': '#ff6b6b', '--warn': '#ffb020', '--warn-text': '#ffb020', '--ok': '#4ade80', '--info': '#7cc4ff',
+      bg: '#000000', elevated: '#0d0d0d', hover: '#1f1f1f', card: '#000000',
+      text: '#ffffff', strong: '#ffffff', muted: '#d0d0d0', border: '#a6a6a6', borderStrong: '#ffffff',
+      accent: '#ffd60a', accentFg: '#000000',
+      danger: '#ff6b6b', warn: '#ffb020', warnText: '#ffb020', ok: '#4ade80', info: '#7cc4ff',
     },
   },
 }
 
+/** A #rrggbb colour at some opacity. */
+export function tint(hex: string, alpha: number): string {
+  const [r, g, b] = [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16))
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
+/** Every colour variable the page, its host controls and the embedded chat read. */
+function colours(p: Palette, mode: Mode): Colours {
+  // Text on a solid status colour: light colours in dark mode, dark ones in light mode.
+  const onSolid = mode === 'light' ? '#ffffff' : '#000000'
+  return {
+    '--bg': p.bg, '--bg-accent': p.hover, '--bg-elevated': p.elevated, '--bg-hover': p.hover,
+    '--card': p.card, '--card-fg': p.text, '--panel': p.bg, '--panel-strong': p.elevated, '--chrome': p.bg,
+    '--text': p.text, '--text-strong': p.strong, '--muted': p.muted, '--muted-strong': p.muted, '--muted-fg': onSolid,
+    '--border': p.border, '--border-strong': p.borderStrong, '--border-hover': p.borderStrong,
+    '--accent': p.accent, '--accent-fg': p.accentFg, '--accent-hover': p.accent,
+    '--accent-subtle': tint(p.accent, 0.16), '--accent-glow': tint(p.accent, 0.3), '--ring': p.accent,
+    '--aim': p.accent, '--aim-fg': p.accentFg, '--aim-subtle': tint(p.accent, 0.16),
+    '--ok': p.ok, '--ok-fg': onSolid, '--ok-subtle': tint(p.ok, 0.14), '--ok-text': p.ok,
+    '--warn': p.warn, '--warn-fg': onSolid, '--warn-subtle': tint(p.warn, 0.14), '--warn-text': p.warnText,
+    '--danger': p.danger, '--danger-fg': onSolid, '--danger-subtle': tint(p.danger, 0.14), '--danger-text': p.danger,
+    '--info': p.info, '--info-fg': onSolid, '--info-text': p.info,
+    '--glass-tint-ultrathin': tint(p.bg, 0.3), '--glass-tint-thin': tint(p.bg, 0.4), '--glass-tint-regular': tint(p.bg, 0.5),
+    '--glass-tint-thick': tint(p.bg, 0.6), '--glass-tint-ultrathick': tint(p.bg, 0.8),
+  }
+}
+
 /** The variables a theme sets, or null for Kiro Crew, which leaves the host's own. */
 export function themeStyle(id: ThemeId, mode: Mode): Colours | null {
-  return id === 'host' ? null : COLOURS[id][mode]
+  return id === 'host' ? null : colours(PALETTES[id][mode], mode)
+}
+
+/** Background, accent and text, for the menu. Kiro Crew's come from the host, so it has none here. */
+export function swatchOf(id: ThemeId, mode: Mode): [string, string, string] | null {
+  const style = themeStyle(id, mode)
+  return style && [style['--bg'], style['--accent'], style['--text']]
 }
 
 type Store = Pick<Storage, 'getItem' | 'setItem'>
@@ -91,11 +137,40 @@ export function readTheme(store: Store): ThemeId {
   }
 }
 
-/** A blocked store keeps the choice for this visit only. */
 export function writeTheme(store: Store, id: ThemeId): void {
   try {
     store.setItem(THEME_KEY, id)
   } catch {
-    // Nothing to keep it in.
+    // Nothing to keep it in. The choice still holds for this visit.
+  }
+}
+
+/**
+ * The one current theme for a document. The page and the panel tab can share a document, so a
+ * pick reaches every subscriber. A blocked store keeps the pick in memory for this visit.
+ */
+export function themeChoice(store: Store | null) {
+  let current = store ? readTheme(store) : DEFAULT_THEME
+  const listeners = new Set<() => void>()
+  const tell = () => listeners.forEach((listener) => listener())
+  return {
+    get: (): ThemeId => current,
+    set(id: ThemeId) {
+      current = id
+      if (store) writeTheme(store, id)
+      tell()
+    },
+    /** Another document changed storage. A null key means it was cleared. */
+    heard(key: string | null) {
+      if (key !== null && key !== THEME_KEY) return
+      current = store ? readTheme(store) : DEFAULT_THEME
+      tell()
+    },
+    subscribe(listener: () => void) {
+      listeners.add(listener)
+      return () => {
+        listeners.delete(listener)
+      }
+    },
   }
 }

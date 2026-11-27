@@ -228,7 +228,7 @@ function FirstRun({ onBuilt }: { onBuilt: (key: string) => void }) {
   const [adding, setAdding] = useState(false)
   return (
     <>
-      <PageHeader title="System Map" />
+      <PageHeader title="System Map" actions={<ThemePicker />} />
       <div className="sm-page">
         <EmptyState
           testId="first-run"
@@ -261,7 +261,7 @@ function SystemMapPage() {
   if (!loaded) {
     return (
       <>
-        <PageHeader title="System Map" />
+        <PageHeader title="System Map" actions={<ThemePicker />} />
         <div className="sm-page">
           <ContentSkeleton rows={6} />
         </div>

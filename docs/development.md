@@ -46,7 +46,8 @@ SYSTEM_MAP_DATA=/tmp/model PORT=9191 SYSTEM_MAP_UNSIGNED=1 python3 backend/serve
 ```
 
 Open <http://127.0.0.1:5199>. Add `?theme=dark` or `?view=panel`. Add `look=blueprint`, `paper`,
-`contrast` or `host` to start in that System Map theme.
+`contrast` or `host` to the query, as in `?look=paper` or `?theme=dark&look=paper`, to start in that
+System Map theme. Like a pick from the Theme chip, it stays until you pick another.
 
 The backend refuses any call the gateway didn't sign, except `/health`. `ui/dev` can't sign, so
 `SYSTEM_MAP_UNSIGNED=1` lets it in. A backend that Kiro Crew starts ignores that flag.
