@@ -90,16 +90,19 @@ export function Dropdown({
   )
 }
 
-/** Up and Down move between the items of a menu, and the first takes focus as it opens. */
+const ITEMS = '[role="menuitem"], [role="menuitemradio"]'
+
+/** Up and Down move between the items of a menu. The checked one, or else the first, takes focus as it opens. */
 export function MenuList({ label, children }: { label: string; children: ReactNode }) {
   const list = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    list.current?.querySelector<HTMLElement>('[role="menuitem"]')?.focus()
+    const first = list.current?.querySelector<HTMLElement>('[aria-checked="true"]') ?? list.current?.querySelector<HTMLElement>(ITEMS)
+    first?.focus()
   }, [])
 
   const move = (event: KeyboardEvent) => {
-    const items = [...(list.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? [])]
+    const items = [...(list.current?.querySelectorAll<HTMLElement>(ITEMS) ?? [])]
     const at = items.indexOf(document.activeElement as HTMLElement)
     const next = event.key === 'ArrowDown' ? at + 1 : event.key === 'ArrowUp' ? at - 1 : null
     if (next === null || items.length === 0) return

@@ -8,6 +8,10 @@ commit that set the version in `app.json`. The format follows
 ## [Unreleased]
 
 ### Added
+- Themes. A **Theme** chip in the page header picks Kiro Crew (the default, as before), Blueprint,
+  Paper or High contrast. Light or dark still follows Kiro Crew. The choice is kept in this browser
+  and the chat side-panel tab follows it. Dialogs, such as Add project, keep Kiro Crew's colours,
+  because Kiro Crew draws them outside the page.
 - `CONTRIBUTING.md`: claim an issue, and wait to be assigned, before opening a pull request for it.
   It also covers tests, checks and disclosing AI tools. The README and the developer guide link to it.
 

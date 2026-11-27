@@ -6,6 +6,7 @@ import type { Project } from './projects'
 import { useActiveRepo, useLive, useNode, useOverview } from './model'
 import type { WorktreeState } from './model'
 import { tablesAtWork } from './overlay'
+import { ThemeScope } from './Theme'
 import { MUTED, NodeDetail, SeverityBadge, TableList } from './parts'
 
 const CHECK_EVERY_MS = 30000
@@ -72,6 +73,14 @@ function PanelBody({
 
 /** The chat side-panel tab: the same model as the page, in one narrow column. */
 export default function SystemMapPanel() {
+  return (
+    <ThemeScope style={{ height: '100%' }}>
+      <PanelContent />
+    </ThemeScope>
+  )
+}
+
+function PanelContent() {
   const { active, loaded, repos, choose, reload } = useActiveRepo()
 
   if (!loaded) return <ContentSkeleton rows={6} />

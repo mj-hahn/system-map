@@ -59,6 +59,10 @@ const CSS = `
 .sm-row[aria-disabled="true"] { cursor: default; opacity: .6; }
 .sm-row-action { display: none; color: var(--accent, #2f7d5c); font-weight: 600; white-space: nowrap; }
 .sm-row[data-active="true"] .sm-row-action { display: inline; }
+.sm-swatch { display: inline-flex; flex: none; width: 30px; height: 14px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-strong, #a1a1aa); }
+.sm-swatch i { flex: 1; }
+.sm-row[aria-checked="true"] { font-weight: 600; }
+.sm-check { margin-left: auto; color: var(--accent, #2f7d5c); }
 .sm-add-empty { display: grid; justify-items: center; gap: 10px; padding: 24px 12px; text-align: center; font-weight: 600; }
 `
 
