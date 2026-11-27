@@ -85,10 +85,23 @@ const PALETTES: Record<Exclude<ThemeId, 'host'>, Record<Mode, Palette>> = {
   },
 }
 
+function channels(hex: string): [number, number, number] {
+  if (!/^#[0-9a-f]{6}$/i.test(hex)) throw new Error(`A palette colour must be #rrggbb, not ${hex}`)
+  return [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16)) as [number, number, number]
+}
+
 /** A #rrggbb colour at some opacity. */
 export function tint(hex: string, alpha: number): string {
-  const [r, g, b] = [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16))
+  const [r, g, b] = channels(hex)
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
+/** `hex` moved part of the way toward `toward`, as #rrggbb. */
+function mix(hex: string, toward: string, amount: number): string {
+  const end = channels(toward)
+  return `#${channels(hex)
+    .map((channel, at) => Math.round(channel + (end[at] - channel) * amount).toString(16).padStart(2, '0'))
+    .join('')}`
 }
 
 /** Every colour variable the page, its host controls and the embedded chat read. */
@@ -100,7 +113,8 @@ function colours(p: Palette, mode: Mode): Colours {
     '--card': p.card, '--card-fg': p.text, '--panel': p.bg, '--panel-strong': p.elevated, '--chrome': p.bg,
     '--text': p.text, '--text-strong': p.strong, '--muted': p.muted, '--muted-strong': p.muted, '--muted-fg': onSolid,
     '--border': p.border, '--border-strong': p.borderStrong, '--border-hover': p.borderStrong,
-    '--accent': p.accent, '--accent-fg': p.accentFg, '--accent-hover': p.accent,
+    // Hover moves away from the background: darker on light, lighter on dark.
+    '--accent': p.accent, '--accent-fg': p.accentFg, '--accent-hover': mix(p.accent, mode === 'light' ? '#000000' : '#ffffff', 0.15),
     '--accent-subtle': tint(p.accent, 0.16), '--accent-glow': tint(p.accent, 0.3), '--ring': p.accent,
     '--aim': p.accent, '--aim-fg': p.accentFg, '--aim-subtle': tint(p.accent, 0.16),
     '--ok': p.ok, '--ok-fg': onSolid, '--ok-subtle': tint(p.ok, 0.14), '--ok-text': p.ok,

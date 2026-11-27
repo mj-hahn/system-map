@@ -1,7 +1,7 @@
 import { jsx as e, jsxs as i, Fragment as v } from "react/jsx-runtime";
 import { ContentSkeleton as y, Btn as S } from "@kirocrew/app-sdk/ui";
 import { useState as x } from "react";
-import { T as b, u as M, o as j, E as k, v as E, J as P, K as z, L as B, M as C, $ as N, S as O, N as T, P as $, F as w } from "./chunks/Theme-Bow5woSM.mjs";
+import { T as b, u as M, o as j, E as k, v as E, J as P, K as z, L as B, M as C, $ as N, S as O, N as T, P as $, F as w } from "./chunks/Theme-DcgEAU_h.mjs";
 const A = 3e4, D = { padding: 12, fontSize: 13 };
 function H({
   repo: s,

@@ -5,7 +5,7 @@ import { jsxs as k, jsx as u, Fragment as ge } from "react/jsx-runtime";
 import { useTheme as Ja, useAppApi as el, ChatEmbed as ou } from "@kirocrew/app-sdk";
 import { Badge as xe, Btn as ie, Input as jr, PageHeader as Ti, ContentSkeleton as si, EmptyState as tl, Card as Po, CardTitle as ws, SegmentedControl as iu } from "@kirocrew/app-sdk/ui";
 import Li, { useState as J, useMemo as le, memo as he, forwardRef as nl, createContext as Yr, useCallback as Ie, useContext as nn, useRef as oe, useEffect as ce, useLayoutEffect as zi } from "react";
-import { s as rn, M as Y, a as we, A as $e, S as Dn, p as Gr, N as su, D as rl, b as au, r as lu, c as cu, C as ol, d as Gt, e as Xt, f as du, g as uu, h as fu, i as hu, w as pu, t as gu, G as mu, j as yu, k as wu, l as bu, T as vu, u as xu, m as Oi, n as _u, o as ku, q as Wt, v as Do, x as Eu, y as Su, z as Nu, B as Cu, E as Mu, F as $u, H as Iu, I as Au, J as Tu, K as Lu, L as zu, O as Ou, P as Pu, Q as Du, R as Ru, U as ut, V as lt, W as Hu, X as Wu, Y as Bu, Z as Vu, _ as Fu } from "./chunks/Theme-Bow5woSM.mjs";
+import { s as rn, M as Y, a as we, A as $e, S as Dn, p as Gr, N as su, D as rl, b as au, r as lu, c as cu, C as ol, d as Gt, e as Xt, f as du, g as uu, h as fu, i as hu, w as pu, t as gu, G as mu, j as yu, k as wu, l as bu, T as vu, u as xu, m as Oi, n as _u, o as ku, q as Wt, v as Do, x as Eu, y as Su, z as Nu, B as Cu, E as Mu, F as $u, H as Iu, I as Au, J as Tu, K as Lu, L as zu, O as Ou, P as Pu, Q as Du, R as Ru, U as ut, V as lt, W as Hu, X as Wu, Y as Bu, Z as Vu, _ as Fu } from "./chunks/Theme-DcgEAU_h.mjs";
 import "react-dom";
 const il = [
   { key: "all", label: "All", title: "Every agent" },

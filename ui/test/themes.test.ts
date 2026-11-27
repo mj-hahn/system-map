@@ -126,6 +126,8 @@ test('text and status colours read at 4.5:1 on every background, card and select
         ['--aim-fg', '--aim'],
         ['--danger-fg', '--danger'],
         ['--ok-fg', '--ok'],
+        ['--warn-fg', '--warn'],
+        ['--info-fg', '--info'],
       ]) {
         const ratio = contrast(solid(style[ink]), solid(style[fill]))
         assert.ok(ratio >= 4.5, `${theme.id} ${mode}: ${ink} on ${fill} is ${ratio.toFixed(2)}:1`)
@@ -161,6 +163,28 @@ test('a change from another document is heard, and other keys are not', () => {
   store.setItem('system-map.theme', 'blueprint')
   choice.heard('system-map.theme')
   assert.equal(choice.get(), 'blueprint')
+  assert.equal(told, 1)
+})
+
+test('primary buttons change on hover, and the hover keeps away from the background', () => {
+  for (const theme of OWN) {
+    for (const mode of MODES) {
+      const style = themeStyle(theme.id, mode)!
+      assert.notEqual(style['--accent-hover'], style['--accent'], `${theme.id} ${mode}`)
+      const bg = solid(style['--bg'])
+      assert.ok(contrast(solid(style['--accent-hover']), bg) > contrast(solid(style['--accent']), bg), `${theme.id} ${mode}`)
+    }
+  }
+})
+
+test('storage cleared in another document goes back to Kiro Crew', () => {
+  const store = memory({ 'system-map.theme': 'paper' })
+  const choice = themeChoice(store)
+  let told = 0
+  choice.subscribe(() => told++)
+  store.setItem('system-map.theme', '')
+  choice.heard(null)
+  assert.equal(choice.get(), 'host')
   assert.equal(told, 1)
 })
 

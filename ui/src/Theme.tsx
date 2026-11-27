@@ -1,5 +1,5 @@
 import { useTheme } from '@kirocrew/app-sdk'
-import { useSyncExternalStore } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import { Chevron, Dropdown, MenuList } from './Menu'
 import { swatchOf, themeChoice, THEMES, themeStyle } from './themes'
@@ -18,8 +18,12 @@ let shared: ReturnType<typeof themeChoice> | null = null
 /** Made on first use, not at import, so it reads storage as it is when the page first draws. */
 function choice() {
   if (!shared) {
-    const made = themeChoice(store())
-    window.addEventListener('storage', (event) => made.heard(event.key))
+    const local = store()
+    const made = themeChoice(local)
+    // sessionStorage fires the same event, and it holds no theme.
+    window.addEventListener('storage', (event) => {
+      if (event.storageArea === local) made.heard(event.key)
+    })
     shared = made
   }
   return shared
@@ -44,14 +48,25 @@ export function ThemeScope({ children, style }: { children: ReactNode; style?: C
   )
 }
 
-/** Kiro Crew's swatch is whatever the host draws, so it reads the host's own values. */
-function hostSwatch(): string[] {
+function readHost(): string[] {
   const root = getComputedStyle(document.documentElement)
   return ['--bg', '--accent', '--text'].map((name) => root.getPropertyValue(name).trim() || 'transparent')
 }
 
+/** Kiro Crew's swatch is whatever the host draws. It sets its theme on `<html>`, so watch that. */
+function useHostSwatch(): string[] {
+  const [colours, setColours] = useState(readHost)
+  useEffect(() => {
+    const watcher = new MutationObserver(() => setColours(readHost()))
+    watcher.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'style', 'data-theme', 'data-mode'] })
+    return () => watcher.disconnect()
+  }, [])
+  return colours
+}
+
 function Swatch({ id, mode }: { id: ThemeId; mode: Mode }) {
-  const colours = swatchOf(id, mode) ?? hostSwatch()
+  const host = useHostSwatch()
+  const colours = swatchOf(id, mode) ?? host
   return (
     <span className="sm-swatch" aria-hidden="true">
       {colours.map((colour, at) => (
